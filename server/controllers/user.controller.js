@@ -1,4 +1,4 @@
-import ApiError from "../utils/ApiError";
+import  ApiError  from '../utils/ApiError';
 import ApiResponse from "../utils/ApiResponse";
 import User from "../models/user.model";
 import bcrypt from "bcrypt";
