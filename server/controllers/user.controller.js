@@ -1,6 +1,6 @@
-import  ApiError  from '../utils/ApiError';
-import ApiResponse from "../utils/ApiResponse";
-import User from "../models/user.model";
+import ApiError from "../utils/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -51,6 +51,11 @@ const generateAccessAndRefereshTokens = async (id) => {
 };
 
 const registerUser = async (req, res) => {
+//   if (!req.body) {
+//     return res.status(400).send(new ApiError(400, "Request body is missing"));
+//   }
+
+console.log(req.body)
   const { username, fullName, age, email, password } = req.body;
 
   if (
