@@ -167,44 +167,42 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
-    req.cookies.refreshToken || req.body.refreshToken;
+    req.cookies.refreshToken ||
+    req.body.refreshToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
   if (!incomingRefreshToken) {
     throw new ApiError(401, "Unauthorized Request");
   }
-  try {
-    const decodedToken = jwt.verify(
-      incomingRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET
-    );
-    const user = await User.findById(decodedToken._id);
-    if (!user) {
-      throw new ApiError(404, "User not found");
-    }
-    if (incomingRefreshToken !== user?.refreshToken) {
-      throw new ApiError(401, "Token expired or used");
-    }
-    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
-      user._id
-    );
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json(
-        new ApiResponse(
-          200,
-          { accessToken, refreshToken },
-          "Refreshed Access Token Successfully"
-        )
-      );
-  } catch (err) {
-    throw new ApiError(401, err.message || "Invalid Refresh Token");
+  const decodedToken = jwt.verify(
+    incomingRefreshToken,
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  const user = await User.findById(decodedToken._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
   }
+  if (incomingRefreshToken !== user?.refreshToken) {
+    throw new ApiError(401, "Token expired or used");
+  }
+  const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+    user._id
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        { accessToken, refreshToken },
+        "Refreshed Access Token Successfully"
+      )
+    );
 });
 
 export { registerUser, loginUser, logoutUser, refreshAccessToken };
