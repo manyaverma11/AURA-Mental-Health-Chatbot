@@ -2,7 +2,7 @@
 import "dotenv/config";
 import connectdb from "../database.js";
 import { app } from "./app.js";
-const PORT = process.env.port || 3000;
+const PORT = process.env.port || 5000;
 
 // import {
 //     registerUser, loginUser, logoutUser, refreshAccessToken
@@ -14,7 +14,7 @@ const PORT = process.env.port || 3000;
 connectdb()
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Server Running");
+      console.log("Server Running at",{PORT});
     });
   })
   .catch((err) => {
