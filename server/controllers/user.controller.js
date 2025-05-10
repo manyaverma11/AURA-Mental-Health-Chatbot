@@ -124,20 +124,34 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: true,
   };
 
-  return res
+  // return res
+  //   .status(200)
+  //   .cookie("accessToken", accessToken, options)
+  //   .cookie("refreshToken", refreshToken, options)
+  //   .json(
+  //     new ApiResponse(
+  //       200,
+  //       {
+  //         user: loggedInUser,
+  //         accessToken,
+  //         refreshToken
+  //       },
+  //       "User logged In Successfully"
+  //     )
+  //   );
+
+    res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: loggedInUser
-        },
-        "User logged In Successfully"
-      )
-    );
+    .cookie("accessToken", accessToken, options)  // Make sure accessToken is not undefined
+    .cookie("refreshToken", refreshToken, options)  // Make sure refreshToken is not undefined
+    .json({
+      message: "User logged In Successfully",
+      user: loggedInUser,
+      accessToken,  // Optional: return tokens if needed
+      refreshToken, // Optional: return tokens if needed
+    });
 });
+
 const logoutUser = asyncHandler(async (req, res) => {
   // Temporary debug - remove in production
   // console.log('Request user:', req.user);
@@ -203,4 +217,18 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const profile = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    console.log("errorororooror");
+  }
+  const { username, fullName, age, email } = req.user;
+  res
+    .status(200)
+    .json({
+      message: "Profile extracted successfully",
+        user:  {username, fullName, age, email }
+      }
+    );
+});
+
+export { registerUser, loginUser, logoutUser, refreshAccessToken, profile };

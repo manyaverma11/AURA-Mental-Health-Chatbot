@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import api from '../utils/api';  // Ensure api.js points to the correct backend URL
-import { useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
+import React, { useState } from "react";
+import api from "../utils/api"; // Ensure api.js points to the correct backend URL
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const navigate = useNavigate();  // useNavigate replaces useHistory
+  const navigate = useNavigate(); // useNavigate replaces useHistory
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,24 +19,24 @@ const LoginForm = () => {
 
     try {
       // POST request to the backend to log in
-      const response = await api.post('/login', loginData);
+      const response = await api.post("/login", loginData);
       console.log(response.data);
 
       // Save the tokens in cookies (or handle them as needed)
-      document.cookie = `accessToken=${response.data.accessToken}; path=/;`;
-      document.cookie = `refreshToken=${response.data.refreshToken}; path=/;`;
+      document.cookie = `accessToken=${response.data.accessToken}; path=/; secure; SameSite=Strict;`;
+      document.cookie = `refreshToken=${response.data.refreshToken}; path=/; secure; SameSite=Strict;`;
 
       // Redirect to profile page after login
-      navigate('/');  // Replace history.push() with navigate() for React Router v6
+      navigate("/profile"); // Replace history.push() with navigate() for React Router v6
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid Credentials');
+      setError(err.response?.data?.message || "Invalid Credentials");
     }
   };
 
   return (
     <div>
       <h2>Login</h2>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
