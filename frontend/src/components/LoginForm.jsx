@@ -19,7 +19,7 @@ const LoginForm = () => {
 
     try {
       // POST request to the backend to log in
-      const response = await api.post("/login", loginData);
+      const response = await api.post("/users/login", loginData);
       console.log(response.data);
 
       // Save the tokens in cookies (or handle them as needed)

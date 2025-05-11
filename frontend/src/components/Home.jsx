@@ -24,7 +24,7 @@ const Home = () => {
       }
 
       try {
-        const response = await api.get('/profile', {  // Ensure the correct endpoint is used
+        const response = await api.get('/users/profile', {  // Ensure the correct endpoint is used
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

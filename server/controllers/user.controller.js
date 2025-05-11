@@ -89,7 +89,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, createdUser, "User registered Successfully"));
+    .json({ createdUser, message: "User registered Successfully" });
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -140,14 +140,14 @@ const loginUser = asyncHandler(async (req, res) => {
   //     )
   //   );
 
-    res
+  res
     .status(200)
-    .cookie("accessToken", accessToken, options)  // Make sure accessToken is not undefined
-    .cookie("refreshToken", refreshToken, options)  // Make sure refreshToken is not undefined
+    .cookie("accessToken", accessToken, options) // Make sure accessToken is not undefined
+    .cookie("refreshToken", refreshToken, options) // Make sure refreshToken is not undefined
     .json({
       message: "User logged In Successfully",
       user: loggedInUser,
-      accessToken,  // Optional: return tokens if needed
+      accessToken, // Optional: return tokens if needed
       refreshToken, // Optional: return tokens if needed
     });
 });
@@ -175,7 +175,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged out successfully"));
+    .json({ message: "User logged out successfully" });
 });
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
@@ -208,27 +208,22 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        { accessToken, refreshToken },
-        "Refreshed Access Token Successfully"
-      )
-    );
+    .json({
+      message: "Refreshed Access Token Successfully",
+      accessToken,
+      refreshToken,
+    });
 });
 
 const profile = asyncHandler(async (req, res) => {
   if (!req.user) {
-    console.log("errorororooror");
+    console.error("User not found");
   }
   const { username, fullName, age, email } = req.user;
-  res
-    .status(200)
-    .json({
-      message: "Profile extracted successfully",
-        user:  {username, fullName, age, email }
-      }
-    );
+  res.status(200).json({
+    message: "Profile extracted successfully",
+    user: { username, fullName, age, email },
+  });
 });
 
 export { registerUser, loginUser, logoutUser, refreshAccessToken, profile };

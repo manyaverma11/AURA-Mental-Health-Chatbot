@@ -25,7 +25,7 @@ const RegisterForm = () => {
 
     try {
       // POST request to the backend
-      const response = await api.post('/register', userData);
+      const response = await api.post('/users/register', userData);
       console.log(response.data);
       navigate('/login');  // Replace history.push() with navigate() for React Router v6
     } catch (err) {
