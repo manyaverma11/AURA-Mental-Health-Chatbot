@@ -27,7 +27,7 @@ const LoginForm = () => {
       document.cookie = `refreshToken=${response.data.refreshToken}; path=/; secure; SameSite=Strict;`;
 
       // Redirect to profile page after login
-      navigate("/profile"); // Replace history.push() with navigate() for React Router v6
+      navigate("/users/profile"); // Replace history.push() with navigate() for React Router v6
     } catch (err) {
       setError(err.response?.data?.message || "Invalid Credentials");
     }

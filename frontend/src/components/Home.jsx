@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 // Helper function to get the value of a specific cookie
 const getCookie = (name) => {
@@ -10,6 +11,7 @@ const getCookie = (name) => {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,6 +56,10 @@ const Home = () => {
     console.log(user)
   }
 
+  const navigateToSent =()=>{
+    navigate('/sentiments/sentiment');
+  }
+
   return (
     <div>
       <h2>Profile</h2>
@@ -61,6 +67,7 @@ const Home = () => {
       <p>Full Name: {user.fullName}</p>
       <p>Email: {user.email}</p>
       <p>Age: {user.age}</p>
+      <button onClick={navigateToSent} >Get Sentiment</button>
     </div>
   );
 };
